@@ -1,0 +1,1513 @@
+# **Prompt Lengkap: Cloud Hammy's dengan Fitur Google Drive + Payment**
+
+## **🚀 SPESIFIKASI CLOUD HAMMY'S PRO**
+
+### **🎯 VISI & FITUR UTAMA**
+```
+Aplikasi Cloud Storage komprehensif dengan:
+1. File Management seperti Google Drive
+2. Sistem Payment untuk upgrade storage
+3. Sharing & Collaboration
+4. Real-time updates
+5. Desain shadcn.io premium tanpa hamster
+```
+
+## **💼 BUSINESS MODEL & MONETIZATION**
+
+### **Storage Plans**
+```typescript
+interface StoragePlan {
+  name: 'Free' | 'Pro' | 'Business' | 'Enterprise';
+  price: number; // per bulan
+  storage: number; // dalam GB
+  features: string[];
+  maxFileSize: number; // dalam MB
+  maxUsers: number;
+}
+```
+
+### **Pricing Structure**
+```typescript
+const PLANS = [
+  {
+    name: 'Free',
+    price: 0,
+    storage: 5,
+    features: ['5 GB Storage', 'Basic Sharing', 'File Preview'],
+    color: 'gray'
+  },
+  {
+    name: 'Pro',
+    price: 29900, // IDR 29,900/month
+    storage: 100,
+    features: ['100 GB Storage', 'Advanced Sharing', 'Priority Support'],
+    color: 'violet'
+  },
+  {
+    name: 'Business',
+    price: 99900, // IDR 99,900/month
+    storage: 1000,
+    features: ['1 TB Storage', 'Team Collaboration', 'Custom Branding'],
+    color: 'emerald'
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    storage: 'Unlimited',
+    features: ['Unlimited Storage', 'Dedicated Support', 'SLA 99.9%'],
+    color: 'blue'
+  }
+];
+```
+
+## **🔐 AUTHENTICATION & USER MANAGEMENT**
+
+### **Enhanced Auth Features**
+```
+- Email/Password login
+- OAuth (Google, GitHub, Microsoft)
+- 2FA dengan authenticator app
+- SSO untuk Enterprise
+- Session management
+- Device management
+```
+
+## **💳 PAYMENT SYSTEM ARCHITECTURE**
+
+### **Payment Flow**
+```
+1. User pilih plan → Checkout page → Payment gateway → 
+   Webhook verification → Update user quota → Send invoice
+```
+
+### **Payment Gateway Options**
+```json
+{
+  "indonesia": {
+    "midtrans": {
+      "features": ["Credit Card", "Bank Transfer", "E-Wallet"],
+      "fees": "2.5% + IDR 2500",
+      "settlement": "1-2 business days"
+    },
+    "xendit": {
+      "features": ["Virtual Account", "QRIS", "Retail Outlets"],
+      "fees": "1.5% + IDR 2500"
+    }
+  },
+  "global": {
+    "stripe": {
+      "features": ["Global Cards", "Apple/Google Pay", "SEPA Debit"],
+      "fees": "2.9% + $0.30"
+    }
+  }
+}
+```
+
+### **Subscription Management**
+```typescript
+interface Subscription {
+  userId: string;
+  plan: StoragePlan;
+  status: 'active' | 'past_due' | 'canceled' | 'expired';
+  currentPeriodStart: Date;
+  currentPeriodEnd: Date;
+  cancelAtPeriodEnd: boolean;
+  paymentMethod: PaymentMethod;
+  invoices: Invoice[];
+}
+```
+
+## **📁 FILE MANAGEMENT SYSTEM (Google Drive-like)**
+
+### **Core Features**
+```
+✅ File Upload
+  - Drag & drop
+  - Folder upload
+  - Resume broken uploads
+  - File size validation
+
+✅ File Operations
+  - Rename
+  - Move to folder
+  - Copy
+  - Delete (move to trash)
+  - Restore from trash
+  - Permanent delete
+  - Star/Favorite
+
+✅ File Preview
+  - Images (JPEG, PNG, GIF, WebP)
+  - PDF (with pagination)
+  - Documents (DOCX, XLSX, PPTX)
+  - Videos (MP4, MOV, AVI) - thumbnail
+  - Audio (MP3, WAV) - waveform
+  - Code files (syntax highlighting)
+
+✅ Organization
+  - Folders & subfolders
+  - Tags/Labels
+  - Color coding
+  - Quick access (pinned)
+  - Recent files
+  - Starred items
+
+✅ Search & Filter
+  - Full-text search
+  - Filter by type, size, date
+  - Advanced search operators
+```
+
+### **Sharing & Collaboration**
+```
+✅ Share Options
+  - Share with specific users
+  - Share via link (public)
+  - Permission levels (View, Comment, Edit)
+  - Password-protected links
+  - Expiry dates
+  - Download restrictions
+
+✅ Collaboration
+  - Real-time file updates
+  - Version history (30 days for Free, unlimited for paid)
+  - Comments on files
+  - Activity feed
+  - User mentions
+
+✅ Team Features (Business+)
+  - Team workspaces
+  - User roles (Admin, Editor, Viewer)
+  - Shared team storage
+  - Team activity reports
+```
+
+## **🎨 UI/UX DESIGN SPECIFICATIONS**
+
+### **Layout Structure (Google Drive Inspired)**
+```
+┌─────────────────────────────────────────────────────┐
+│ Header                                             │
+│ [Logo] [Search] [Upgrade] [User] [Theme]           │
+├─────────────────────────────────────────────────────┤
+│ Sidebar              │ Main Content Area           │
+│ • Quick Access       │ • Breadcrumb                │
+│ • My Drive           │ • Toolbar (New, Upload,     │
+│ • Shared with me     │   Sort, View)               │
+│ • Recent             │ • File Grid/List View       │
+│ • Starred            │   with checkboxes           │
+│ • Trash              │ • Right-click context menu  │
+│ • Storage            │ • Preview pane (optional)   │
+│ • Billing            │                             │
+└─────────────────────────────────────────────────────┘
+```
+
+### **Color System**
+```css
+:root {
+  /* Primary Brand Colors */
+  --primary-50: #f5f3ff;
+  --primary-100: #ede9fe;
+  --primary-500: #7c3aed;  /* Violet - Professional */
+  --primary-600: #6d28d9;
+  
+  /* Secondary */
+  --secondary-500: #059669; /* Emerald */
+  
+  /* Accent */
+  --accent-500: #2563eb; /* Blue for CTAs */
+  
+  /* File Type Colors */
+  --folder-color: #fb923c; /* Orange */
+  --document-color: #3b82f6; /* Blue */
+  --image-color: #ec4899; /* Pink */
+  --pdf-color: #ef4444; /* Red */
+  --video-color: #8b5cf6; /* Purple */
+  --audio-color: #10b981; /* Green */
+}
+```
+
+## **⚙️ TECH STACK DETAILED**
+
+### **Frontend Stack**
+```json
+{
+  "framework": "Next.js 14 (App Router)",
+  "language": "TypeScript 5.x",
+  "styling": {
+    "css": "Tailwind CSS v3.3",
+    "components": "shadcn/ui (customized)",
+    "icons": "Lucide React",
+    "animations": "Framer Motion"
+  },
+  "state": {
+    "client": "Zustand",
+    "server": "React Query (TanStack Query)",
+    "forms": "React Hook Form + Zod"
+  },
+  "ui": {
+    "tables": "TanStack Table",
+    "charts": "Recharts",
+    "editor": "TipTap (for document preview)",
+    "pdf": "react-pdf",
+    "video": "video.js/react",
+    "code": "react-syntax-highlighter"
+  }
+}
+```
+
+### **Backend Stack**
+```json
+{
+  "runtime": "Next.js API Routes + Server Actions",
+  "database": "PostgreSQL (Supabase/Neon)",
+  "orm": "Prisma",
+  "auth": "Clerk.dev (or NextAuth.js)",
+  "file": {
+    "storage": "AWS S3 / Google Cloud Storage",
+    "cdn": "Cloudflare R2",
+    "upload": "uploadthing.com"
+  },
+  "payment": {
+    "stripe": "for global",
+    "midtrans": "for Indonesia",
+    "webhooks": "for subscription updates"
+  },
+  "realtime": {
+    "pusher": "for live updates",
+    "supabase": "for database changes"
+  },
+  "email": "Resend",
+  "analytics": "PostHog / Mixpanel"
+}
+```
+
+## **📁 FILE STRUCTURE DETAILED**
+
+```bash
+cloud-hammys-pro/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/
+│   │   ├── register/
+│   │   ├── forgot-password/
+│   │   └── layout.tsx
+│   ├── dashboard/
+│   │   ├── page.tsx
+│   │   └── layout.tsx
+│   ├── drive/
+│   │   ├── [folderId]/
+│   │   │   └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── layout.tsx
+│   │   └── loading.tsx
+│   ├── shared/
+│   │   ├── [shareId]/
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── billing/
+│   │   ├── plans/
+│   │   ├── payment-methods/
+│   │   ├── invoices/
+│   │   └── page.tsx
+│   ├── settings/
+│   │   ├── profile/
+│   │   ├── security/
+│   │   └── page.tsx
+│   ├── api/
+│   │   ├── upload/
+│   │   ├── files/
+│   │   ├── billing/
+│   │   ├── webhooks/
+│   │   └── share/
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── ui/                    # shadcn components
+│   ├── layout/
+│   │   ├── AppShell.tsx
+│   │   ├── Header.tsx
+│   │   ├── Sidebar.tsx
+│   │   └── Breadcrumb.tsx
+│   ├── files/
+│   │   ├── FileGrid.tsx
+│   │   ├── FileList.tsx
+│   │   ├── FileCard.tsx
+│   │   ├── UploadZone.tsx
+│   │   ├── PreviewModal.tsx
+│   │   ├── ShareDialog.tsx
+│   │   └── ContextMenu.tsx
+│   ├── dashboard/
+│   │   ├── StorageStats.tsx
+│   │   ├── QuickActions.tsx
+│   │   ├── RecentActivity.tsx
+│   │   └── UpgradeBanner.tsx
+│   ├── billing/
+│   │   ├── PlanCard.tsx
+│   │   ├── PaymentForm.tsx
+│   │   ├── InvoiceTable.tsx
+│   │   └── BillingHistory.tsx
+│   └── shared/
+│       ├── SearchBar.tsx
+│       ├── FileIcon.tsx
+│       ├── ProgressBar.tsx
+│       └── EmptyState.tsx
+├── lib/
+│   ├── supabase.ts
+│   ├── stripe.ts
+│   ├── upload.ts
+│   ├── storage.ts
+│   └── utils.ts
+├── hooks/
+│   ├── useUpload.ts
+│   ├── useFiles.ts
+│   ├── useStorage.ts
+│   └── useSubscription.ts
+├── types/
+│   ├── file.ts
+│   ├── user.ts
+│   ├── subscription.ts
+│   └── api.ts
+├── public/
+│   ├── icons/ (file type icons)
+│   └── images/
+└── styles/
+    └── globals.css
+```
+
+## **🔧 IMPLEMENTASI DETAILED**
+
+### **1. Database Schema (Prisma)**
+```prisma
+// prisma/schema.prisma
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  image         String?
+  plan          String   @default("free")
+  storageUsed   BigInt   @default(0)
+  storageLimit  BigInt   @default(5368709120) // 5GB in bytes
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  files         File[]
+  shares        Share[]
+  subscriptions Subscription[]
+  invoices      Invoice[]
+}
+
+model File {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // mime type
+  size        BigInt
+  key         String   // S3 key
+  url         String?
+  folderId    String?
+  userId      String
+  isPublic    Boolean  @default(false)
+  isStarred   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id])
+  folder      File?    @relation("FolderFiles", fields: [folderId], references: [id])
+  files       File[]   @relation("FolderFiles")
+  shares      Share[]
+  versions    FileVersion[]
+  
+  @@index([userId])
+  @@index([folderId])
+}
+
+model Share {
+  id          String   @id @default(cuid())
+  fileId      String
+  userId      String
+  type        String   @default("link") // link or user
+  permission  String   @default("view") // view, comment, edit
+  password    String?
+  expiresAt   DateTime?
+  downloadCount Int    @default(0)
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  file        File     @relation(fields: [fileId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@unique([fileId, userId])
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  userId      String
+  plan        String
+  status      String   @default("active")
+  stripeId    String?  @unique
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd Boolean @default(false)
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Invoice {
+  id          String   @id @default(cuid())
+  userId      String
+  amount      Decimal
+  currency    String   @default("IDR")
+  status      String   @default("pending")
+  stripeId    String?
+  pdfUrl      String?
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id])
+}
+```
+
+### **2. Upload System dengan Resume**
+```typescript
+// hooks/useUpload.ts
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+interface UploadFile {
+  id: string;
+  file: File;
+  progress: number;
+  status: 'pending' | 'uploading' | 'completed' | 'error';
+  error?: string;
+}
+
+export function useUpload() {
+  const [uploads, setUploads] = useState<UploadFile[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadFile = async (file: File, folderId?: string) => {
+    const fileId = uuidv4();
+    const uploadFile: UploadFile = {
+      id: fileId,
+      file,
+      progress: 0,
+      status: 'pending'
+    };
+
+    setUploads(prev => [...prev, uploadFile]);
+
+    // Create multipart upload
+    const response = await fetch('/api/upload/start', {
+      method: 'POST',
+      body: JSON.stringify({
+        fileName: file.name,
+        fileSize: file.size,
+        folderId,
+        contentType: file.type
+      })
+    });
+
+    const { uploadId, parts } = await response.json();
+
+    // Upload parts
+    const chunkSize = 5 * 1024 * 1024; // 5MB chunks
+    const chunks = Math.ceil(file.size / chunkSize);
+
+    for (let i = 0; i < chunks; i++) {
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, file.size);
+      const chunk = file.slice(start, end);
+
+      const uploadResponse = await fetch(`/api/upload/part`, {
+        method: 'POST',
+        body: JSON.stringify({
+          uploadId,
+          partNumber: i + 1,
+          chunk: await chunk.arrayBuffer()
+        })
+      });
+
+      const progress = Math.round(((i + 1) / chunks) * 100);
+      setUploads(prev => 
+        prev.map(u => 
+          u.id === fileId ? { ...u, progress, status: 'uploading' } : u
+        )
+      );
+    }
+
+    // Complete upload
+    await fetch('/api/upload/complete', {
+      method: 'POST',
+      body: JSON.stringify({ uploadId })
+    });
+
+    setUploads(prev => 
+      prev.map(u => 
+        u.id === fileId ? { ...u, progress: 100, status: 'completed' } : u
+      )
+    );
+  };
+
+  return { uploads, uploadFile, isUploading };
+}
+```
+
+### **3. File Preview Component**
+```tsx
+// components/files/PreviewModal.tsx
+'use client';
+
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Download, Share2, Star, MoreVertical } from 'lucide-react';
+
+interface PreviewModalProps {
+  file: File | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function PreviewModal({ file, open, onOpenChange }: PreviewModalProps) {
+  if (!file) return null;
+
+  const renderPreview = () => {
+    const mimeType = file.type || '';
+
+    if (mimeType.startsWith('image/')) {
+      return (
+        <img 
+          src={file.url} 
+          alt={file.name}
+          className="max-h-[70vh] max-w-full object-contain"
+        />
+      );
+    }
+
+    if (mimeType === 'application/pdf') {
+      return (
+        <iframe 
+          src={`${file.url}#view=fitH`}
+          className="w-full h-[70vh] border-0"
+          title={file.name}
+        />
+      );
+    }
+
+    if (mimeType.includes('document') || mimeType.includes('presentation')) {
+      return (
+        <iframe 
+          src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file.url)}`}
+          className="w-full h-[70vh] border-0"
+          title={file.name}
+        />
+      );
+    }
+
+    return (
+      <div className="flex flex-col items-center justify-center h-[70vh]">
+        <div className="text-6xl mb-4">
+          📄
+        </div>
+        <p className="text-lg text-muted-foreground">
+          Preview not available for this file type
+        </p>
+        <Button className="mt-4" onClick={() => window.open(file.url, '_blank')}>
+          <Download className="mr-2 h-4 w-4" />
+          Download to view
+        </Button>
+      </div>
+    );
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-6xl max-h-[90vh]">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-xl font-semibold">{file.name}</h2>
+            <p className="text-sm text-muted-foreground">
+              {formatBytes(file.size)} • {formatDate(file.createdAt)}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon">
+              <Star className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Share2 className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Download className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <MoreVertical className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="overflow-auto">
+          {renderPreview()}
+        </div>
+
+        <div className="mt-4 pt-4 border-t">
+          <h3 className="font-semibold mb-2">Details</h3>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-muted-foreground">Type:</span>
+              <span className="ml-2">{file.type}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Size:</span>
+              <span className="ml-2">{formatBytes(file.size)}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Modified:</span>
+              <span className="ml-2">{formatDate(file.updatedAt)}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Owner:</span>
+              <span className="ml-2">{file.user?.name}</span>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+### **4. Payment Integration (Stripe + Midtrans)**
+```tsx
+// components/billing/CheckoutForm.tsx
+'use client';
+
+import { useState } from 'react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+
+interface CheckoutFormProps {
+  plan: StoragePlan;
+}
+
+export function CheckoutForm({ plan }: CheckoutFormProps) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank' | 'ewallet'>('card');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    try {
+      let paymentResult;
+
+      if (paymentMethod === 'card') {
+        // Stripe Card Payment
+        const cardElement = elements.getElement(CardElement);
+        
+        const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement!,
+        });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        paymentResult = await fetch('/api/billing/subscribe', {
+          method: 'POST',
+          body: JSON.stringify({
+            plan: plan.name,
+            paymentMethodId: stripePaymentMethod.id,
+            amount: plan.price
+          })
+        });
+      } else {
+        // Midtrans for Bank Transfer / E-wallet
+        paymentResult = await fetch('/api/billing/midtrans', {
+          method: 'POST',
+          body: JSON.stringify({
+            plan: plan.name,
+            amount: plan.price,
+            paymentMethod
+          })
+        });
+
+        const { redirect_url } = await paymentResult.json();
+        window.location.href = redirect_url;
+        return;
+      }
+
+      const result = await paymentResult.json();
+      
+      if (result.status === 'success') {
+        // Show success message
+        window.location.href = '/dashboard?upgrade=success';
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Select Payment Method</h3>
+        
+        <RadioGroup value={paymentMethod} onValueChange={(v: any) => setPaymentMethod(v)}>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="card" id="card" />
+            <Label htmlFor="card">Credit/Debit Card</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="bank" id="bank" />
+            <Label htmlFor="bank">Bank Transfer</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="ewallet" id="ewallet" />
+            <Label htmlFor="ewallet">E-Wallet (Gopay, OVO, Dana)</Label>
+          </div>
+        </RadioGroup>
+      </div>
+
+      {paymentMethod === 'card' && (
+        <div className="space-y-4">
+          <div className="border rounded-lg p-4">
+            <CardElement 
+              options={{
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#424770',
+                    '::placeholder': {
+                      color: '#aab7c4',
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-4">
+        <div className="flex justify-between text-lg">
+          <span>Total:</span>
+          <span className="font-bold">Rp {plan.price.toLocaleString()}/month</span>
+        </div>
+        
+        <Button 
+          type="submit" 
+          className="w-full" 
+          size="lg"
+          disabled={loading || !stripe}
+        >
+          {loading ? 'Processing...' : `Upgrade to ${plan.name}`}
+        </Button>
+        
+        <p className="text-xs text-center text-muted-foreground">
+          By upgrading, you agree to our Terms of Service and Privacy Policy.
+          Cancel anytime.
+        </p>
+      </div>
+    </form>
+  );
+}
+```
+
+### **5. Real-time File Updates dengan Supabase**
+```typescript
+// hooks/useRealtimeFiles.ts
+import { useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useStore } from '@/store/useStore';
+
+export function useRealtimeFiles(userId: string) {
+  const { setFiles } = useStore();
+
+  useEffect(() => {
+    // Subscribe to file changes
+    const channel = supabase
+      .channel('files-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // INSERT, UPDATE, DELETE
+          schema: 'public',
+          table: 'files',
+          filter: `user_id=eq.${userId}`
+        },
+        (payload) => {
+          // Update local state based on event
+          switch (payload.eventType) {
+            case 'INSERT':
+              setFiles(prev => [...prev, payload.new]);
+              break;
+            case 'UPDATE':
+              setFiles(prev => 
+                prev.map(file => 
+                  file.id === payload.new.id ? payload.new : file
+                )
+              );
+              break;
+            case 'DELETE':
+              setFiles(prev => 
+                prev.filter(file => file.id !== payload.old.id)
+              );
+              break;
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [userId, setFiles]);
+}
+```
+
+### **6. Advanced Search System**
+```tsx
+// components/shared/AdvancedSearch.tsx
+'use client';
+
+import { useState } from 'react';
+import { Search, Filter, Calendar, FileType } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+interface SearchFilters {
+  query: string;
+  type: string;
+  size: string;
+  date: string;
+}
+
+export function AdvancedSearch() {
+  const [filters, setFilters] = useState<SearchFilters>({
+    query: '',
+    type: 'all',
+    size: 'all',
+    date: 'all'
+  });
+
+  const fileTypes = [
+    { value: 'all', label: 'All Types' },
+    { value: 'image', label: 'Images' },
+    { value: 'document', label: 'Documents' },
+    { value: 'video', label: 'Videos' },
+    { value: 'audio', label: 'Audio' },
+    { value: 'archive', label: 'Archives' }
+  ];
+
+  const sizeRanges = [
+    { value: 'all', label: 'Any Size' },
+    { value: 'small', label: 'Small (< 10MB)' },
+    { value: 'medium', label: 'Medium (10MB - 100MB)' },
+    { value: 'large', label: 'Large (> 100MB)' }
+  ];
+
+  const dateRanges = [
+    { value: 'all', label: 'Anytime' },
+    { value: 'today', label: 'Today' },
+    { value: 'week', label: 'Past Week' },
+    { value: 'month', label: 'Past Month' },
+    { value: 'year', label: 'Past Year' }
+  ];
+
+  const handleSearch = () => {
+    // Implement search logic
+    console.log('Searching with filters:', filters);
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder="Search files and folders..."
+          className="pl-9"
+          value={filters.query}
+          onChange={(e) => setFilters({ ...filters, query: e.target.value })}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+        />
+      </div>
+
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" size="icon">
+            <Filter className="h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-80">
+          <div className="space-y-4">
+            <h4 className="font-medium">Advanced Filters</h4>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium">File Type</label>
+              <Select value={filters.type} onValueChange={(v) => setFilters({ ...filters, type: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fileTypes.map(type => (
+                    <SelectItem key={type.value} value={type.value}>
+                      <div className="flex items-center gap-2">
+                        <FileType className="h-4 w-4" />
+                        {type.label}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Size</label>
+              <Select value={filters.size} onValueChange={(v) => setFilters({ ...filters, size: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select size" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sizeRanges.map(size => (
+                    <SelectItem key={size.value} value={size.value}>
+                      {size.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Date Modified</label>
+              <Select value={filters.date} onValueChange={(v) => setFilters({ ...filters, date: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select date" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dateRanges.map(date => (
+                    <SelectItem key={date.value} value={date.value}>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        {date.label}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button onClick={handleSearch} className="w-full">
+              Apply Filters
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+```
+
+### **7. Storage Usage Dashboard**
+```tsx
+// components/dashboard/StorageDashboard.tsx
+'use client';
+
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Upgrade, Trash2, Download } from 'lucide-react';
+
+interface StorageData {
+  used: number;
+  total: number;
+  breakdown: {
+    name: string;
+    value: number;
+    color: string;
+  }[];
+}
+
+export function StorageDashboard({ data }: { data: StorageData }) {
+  const usagePercentage = (data.used / data.total) * 100;
+  
+  const formatBytes = (bytes: number) => {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    let size = bytes;
+    let unitIndex = 0;
+    
+    while (size >= 1024 && unitIndex < units.length - 1) {
+      size /= 1024;
+      unitIndex++;
+    }
+    
+    return `${size.toFixed(2)} ${units[unitIndex]}`;
+  };
+
+  const getStorageSuggestions = () => {
+    if (usagePercentage > 90) {
+      return [
+        { action: 'Clear temporary files', icon: <Trash2 className="h-4 w-4" /> },
+        { action: 'Download and delete old files', icon: <Download className="h-4 w-4" /> },
+        { action: 'Upgrade storage plan', icon: <Upgrade className="h-4 w-4" /> }
+      ];
+    }
+    return [];
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Storage Overview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-2xl font-bold">{formatBytes(data.used)}</p>
+                <p className="text-sm text-muted-foreground">
+                  of {formatBytes(data.total)} used
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold">{usagePercentage.toFixed(1)}%</p>
+                <p className="text-sm text-muted-foreground">used</p>
+              </div>
+            </div>
+            
+            <Progress value={usagePercentage} className="h-2" />
+            
+            {usagePercentage > 80 && (
+              <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Upgrade className="h-5 w-5 text-amber-600" />
+                  <p className="font-medium">Storage almost full</p>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Consider upgrading your plan or cleaning up unused files.
+                </p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Storage Breakdown</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={data.breakdown}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {data.breakdown.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value) => [`${formatBytes(value as number)}`, 'Size']}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            
+            <div className="space-y-2 mt-4">
+              {data.breakdown.map((item) => (
+                <div key={item.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-3 h-3 rounded-full" 
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span>{item.name}</span>
+                  </div>
+                  <span className="font-medium">{formatBytes(item.value)}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {getStorageSuggestions().length > 0 ? (
+              <>
+                <p className="text-sm text-muted-foreground">
+                  Suggestions to free up space:
+                </p>
+                <div className="space-y-2">
+                  {getStorageSuggestions().map((suggestion, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
+                      {suggestion.icon}
+                      <span className="ml-2">{suggestion.action}</span>
+                    </Button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Upgrade className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="font-semibold">Storage is healthy</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  You have plenty of space available.
+                </p>
+              </div>
+            )}
+            
+            <Button className="w-full" variant="default">
+              <Upgrade className="mr-2 h-4 w-4" />
+              Upgrade Storage Plan
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+```
+
+## **🚀 DEPLOYMENT & SCALING**
+
+### **Infrastructure Architecture**
+```yaml
+# Docker Compose for Production
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://...
+      - AWS_ACCESS_KEY=...
+      - AWS_SECRET_KEY=...
+    depends_on:
+      - postgres
+      - redis
+  
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=cloudhammys
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+  redis:
+    image: redis:7-alpine
+  
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+
+volumes:
+  postgres_data:
+```
+
+### **CI/CD Pipeline**
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run tests
+        run: npm test
+        
+      - name: Build
+        run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.APP_URL }}
+          
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
+```
+
+## **📊 MONETIZATION METRICS**
+
+### **Key Performance Indicators**
+```typescript
+interface KPIs {
+  mrr: number; // Monthly Recurring Revenue
+  arr: number; // Annual Recurring Revenue
+  churnRate: number; // Monthly churn rate
+  ltv: number; // Customer Lifetime Value
+  conversionRate: number; // Free to paid
+  storageUtilization: number; // Average storage used
+}
+```
+
+### **Analytics Dashboard**
+```tsx
+// app/admin/analytics/page.tsx
+export default function AnalyticsPage() {
+  return (
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <MetricCard title="Monthly Revenue" value="Rp 12,450,000" change="+12%" />
+        <MetricCard title="Active Users" value="1,234" change="+8%" />
+        <MetricCard title="Conversion Rate" value="3.2%" change="+0.5%" />
+        <MetricCard title="Avg. Storage Used" value="28.5 GB" change="+15%" />
+      </div>
+      
+      <div className="grid gap-6 lg:grid-cols-2">
+        <RevenueChart />
+        <UserGrowthChart />
+      </div>
+    </div>
+  );
+}
+```
+
+## **🔐 SECURITY FEATURES**
+
+### **Security Measures**
+```
+1. End-to-end encryption for sensitive files
+2. Two-factor authentication (2FA)
+3. IP whitelisting for enterprise
+4. File scanning for malware
+5. Audit logs for all operations
+6. GDPR compliance
+7. Data retention policies
+```
+
+### **File Security**
+```typescript
+interface FileSecurity {
+  encryption: 'AES-256-GCM';
+  accessControl: {
+    roleBased: boolean;
+    timeBased: boolean;
+    geoRestriction: boolean;
+  };
+  backup: {
+    enabled: boolean;
+    frequency: 'daily' | 'weekly';
+    retention: number; // days
+  };
+}
+```
+
+## **🎯 ROADMAP DEVELOPMENT**
+
+### **Phase 1: MVP (Month 1-2)**
+```
+✅ Basic file upload/download
+✅ User authentication
+✅ Storage plans
+✅ Payment integration (1 method)
+✅ Basic file sharing
+```
+
+### **Phase 2: Enhanced (Month 3-4)**
+```
+✅ Advanced sharing (permissions, expiry)
+✅ File preview for common types
+✅ Real-time updates
+✅ Mobile responsive
+✅ Advanced search
+```
+
+### **Phase 3: Collaboration (Month 5-6)**
+```
+✅ Team workspaces
+✅ Real-time collaboration
+✅ Comments & annotations
+✅ Version history
+✅ Integrations (Google, Microsoft)
+```
+
+### **Phase 4: Enterprise (Month 7-8)**
+```
+✅ SSO & LDAP integration
+✅ Custom branding
+✅ Advanced analytics
+✅ API access
+✅ White-label solution
+```
+
+## **💰 COST STRUCTURE**
+
+### **Monthly Operational Costs**
+```typescript
+const OPERATIONAL_COSTS = {
+  hosting: 500000, // IDR 500k
+  storage: 200000, // IDR 200k (per TB)
+  bandwidth: 300000, // IDR 300k
+  paymentFees: 250000, // IDR 250k
+  support: 1000000, // IDR 1jt
+  marketing: 2000000, // IDR 2jt
+  total: 4250000 // IDR 4.25jt/month
+};
+```
+
+### **Pricing Strategy**
+```
+Free Tier: 5GB storage, basic features
+→ Goal: User acquisition, 95% free users expected
+
+Pro Plan: IDR 29,900/month (100GB)
+→ Target: 3% conversion, power users
+
+Business Plan: IDR 99,900/month (1TB)
+→ Target: Small teams, businesses
+
+Enterprise: Custom pricing
+→ Target: Large organizations
+```
+
+## **🚀 LAUNCH STRATEGY**
+
+### **Pre-launch (Week 1-2)**
+```
+1. Beta testing with 50 users
+2. Bug bounty program
+3. SEO optimization
+4. Content marketing (blog posts)
+5. Social media setup
+```
+
+### **Launch (Week 3)**
+```
+1. Product Hunt launch
+2. Tech media outreach
+3. Early adopter discounts
+4. Referral program launch
+```
+
+### **Post-launch (Week 4+)**
+```
+1. User feedback collection
+2. Feature prioritization
+3. Partnership development
+4. Scale marketing efforts
+```
+
+## **✅ SUCCESS METRICS**
+
+### **Initial Goals (6 Months)**
+```typescript
+const SIX_MONTH_GOALS = {
+  activeUsers: 10000,
+  paidSubscribers: 300, // 3% conversion
+  mrr: 15000000, // IDR 15jt/month
+  storageUnderManagement: 50, // TB
+  customerSatisfaction: 4.5, // out of 5
+};
+```
+
+## **📞 SUPPORT & MAINTENANCE**
+
+### **Support Channels**
+```
+1. In-app chat (Crisp/Intercom)
+2. Email support: support@cloudhammys.com
+3. Knowledge base
+4. Video tutorials
+5. Community forum
+```
+
+### **SLA for Paid Plans**
+```
+Pro Plan:
+- Email support: 24h response
+- Uptime: 99.5%
+
+Business Plan:
+- Priority support: 8h response
+- Uptime: 99.9%
+- Dedicated account manager
+
+Enterprise:
+- 24/7 phone support
+- Uptime: 99.99%
+- Custom SLAs
+```
+
+---
+
+## **🎯 FINAL CHECKLIST**
+```
+[ ] Core file operations (upload, download, delete)
+[ ] User authentication & authorization
+[ ] Payment system integration
+[ ] Storage plans & upgrades
+[ ] File sharing & permissions
+[ ] File preview system
+[ ] Real-time updates
+[ ] Admin dashboard
+[ ] Analytics & reporting
+[ ] Mobile responsive
+[ ] Security measures
+[ ] Documentation
+[ ] Deployment pipeline
+```
+
+Prompt ini memberikan spesifikasi lengkap untuk membuat **Cloud Hammy's Pro** - platform cloud storage dengan fitur Google Drive-like, sistem payment, sharing, dan desain shadcn.io premium. Sistem ini siap untuk dikembangkan menjadi produk komersial yang scalable. dan hilangkan masalah ini 
